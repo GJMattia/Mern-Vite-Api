@@ -40,6 +40,20 @@ const userSchema = new Schema(
         required: true,
       },
     },
+    verified: {
+      type: Boolean,
+      trim: true,
+      required: true,
+      default: false,
+    },
+    code: {
+      type: Number,
+      trim: true,
+      required: true,
+      default: function () {
+        return Math.floor(1000 + Math.random() * 9000);
+      },
+    },
   },
   {
     timestamps: true,
