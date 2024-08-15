@@ -57,6 +57,24 @@ app.post("/send-verification-email", (req, res) => {
   });
 });
 
+app.post("/email-reset-code", (req, res) => {
+  const { email, code } = req.body;
+
+  const mailOptions = {
+    from: "zombiedbmailer@gmail.com",
+    to: email,
+    subject: "This is the code to reset your password",
+    text: `Your verification code is ${code}`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return res.status(500).send(error.toString());
+    }
+    res.status(200).send("Email sent: " + info.response);
+  });
+});
+
 //App Listener
 app.listen(PORT, () => {
   console.log("listening on port " + PORT);

@@ -6,8 +6,36 @@ module.exports = {
   create,
   login,
   verify,
+  sendcode,
+  resetPW,
   checkToken,
 };
+
+async function resetPW(req, res) {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    user.password = req.body.password;
+    user.save();
+    res.json({ result: true });
+  } catch (err) {
+    res.status(400).json("Bad Credentials");
+  }
+}
+
+async function sendcode(req, res) {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      user.code = Math.floor(1000 + Math.random() * 9000);
+      user.save();
+      res.json({ user: user, error: false });
+    } else if (!user) {
+      res.json({ error: true });
+    }
+  } catch (err) {
+    res.status(400).json("Bad Credentials");
+  }
+}
 
 async function verify(req, res) {
   try {
